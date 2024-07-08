@@ -22,7 +22,6 @@ function addEdge(origin, destination) {
     //  adjancyList.get(destination).push(origin)
 }
 
-
 console.log(adjancyList);
 
 let destinations = function findDestinations(a,b) {
@@ -40,7 +39,6 @@ let destinations = function findDestinations(a,b) {
     return concatenatedArray;
 }
 
-
 for (let origin of adjancyList.keys()) {
     let currentArrayOfDestinations = destinations(parseInt(origin[0]), parseInt(origin[2]));
     // console.log(origin, "origin");
@@ -50,3 +48,25 @@ for (let origin of adjancyList.keys()) {
     }
 }
 console.log(adjancyList)
+
+function knightMovesBfs(origin, destination) {
+    let queueArray = [origin];
+    let visitedSquares = new Set();
+    while (queueArray.length > 0) {
+        const dequeuedElement = queueArray.shift();
+        const destinations = adjancyList.get(String(dequeuedElement));
+
+        for (let square of destinations) {
+            console.log(square);
+            if (square == destination) {
+                console.log(square, "here");
+            }
+            if (!visitedSquares.has(square)) {
+                visitedSquares.add(square);
+                queueArray.push(square);
+            }       
+        }
+    }
+}
+
+knightMovesBfs([0,0],[7,7]);
