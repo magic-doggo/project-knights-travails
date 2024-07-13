@@ -19,7 +19,7 @@ for (let i = 0; i < boardArray.length; i++) {
 
 function addEdge(origin, destination) {
      adjancyList.get(origin).push(destination);
-    //  adjancyList.get(destination).push(origin)
+    //  adjancyList.get(destination).push(origin);
 }
 
 console.log(adjancyList);
@@ -41,8 +41,6 @@ let destinations = function findDestinations(a,b) {
 
 for (let origin of adjancyList.keys()) {
     let currentArrayOfDestinations = destinations(parseInt(origin[0]), parseInt(origin[2]));
-    // console.log(origin, "origin");
-    // console.log(currentArrayOfDestinations , "currentarrayofdestinations");
     for (let i = 0; i < currentArrayOfDestinations.length; i++) {
         addEdge(origin, currentArrayOfDestinations[i]);
     }
@@ -50,23 +48,38 @@ for (let origin of adjancyList.keys()) {
 console.log(adjancyList)
 
 function knightMovesBfs(origin, destination) {
-    let queueArray = [origin];
+    //store origin, as well as [path to current square (origin)]
+    let queueArray = [[origin, [origin]]]; 
     let visitedSquares = new Set();
     while (queueArray.length > 0) {
-        const dequeuedElement = queueArray.shift();
+        //pop first element from queue, and save the path to element in array
+        const [dequeuedElement, path] = queueArray.shift();
+        //get a list of possible destinations from current square
         const destinations = adjancyList.get(String(dequeuedElement));
-
         for (let square of destinations) {
-            console.log(square);
             if (square == destination) {
-                console.log(square, "here");
+                let finalPath = path.concat([square]);
+                console.log(`You made it in ${finalPath.length} moves! Here is your path:`)
+                for (let square of finalPath) {
+                    if (typeof square === "string") {
+                        let squareArray = square.split(',').map(Number);
+                        console.log(squareArray)
+                        // let intSquareArray = [];
+                        // for (let i = 0; i < squareArray.length; i++) {
+                        //     intSquareArray.push(Number(squareArray[i]));
+                        // }
+                        // console.log(intSquareArray);
+                    } else console.log(square);
+                }
+                return finalPath;
             }
             if (!visitedSquares.has(square)) {
+                //if new square and not destination, add new array to end of queueArary; [0] is the square and [1] is the path to square in new array
                 visitedSquares.add(square);
-                queueArray.push(square);
-            }       
+                queueArray.push([square, path.concat([square])]);
+            }  
         }
     }
 }
 
-knightMovesBfs([0,0],[7,7]);
+knightMovesBfs([0,0],[3,4]);
